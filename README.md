@@ -129,12 +129,12 @@ Frontend runs at: http://localhost:5173
 ---
 
 ## API Endpoints
-| Method | Endpoint   | Description   |
-|--------|------------|---------------|
-| GET    | /notes     | Get all notes |
-| POST   | /notes     | Add new notes |
-| PUT    | /notes/:id | Update a note |
-| DELETE | /notes/:id | Delete a note |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET`    | `/notes`     | Get all notes |
+| `POST`   | `/notes`     | Add new notes |
+| `PUT`    | `/notes/:id` | Update a note |
+| `DELETE` | `/notes/:id` | Delete a note |
 
 ---
 
