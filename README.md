@@ -1,4 +1,4 @@
-# NoteFlow - Simple Notes App (Vue + Node.js + MySQL)
+# NoteFlow - Simple Notes App
 NoteFlow is a lightweight text-based notes management web application build with:
 - Frontend UI - Vue 3
 - Bootstrap 5
@@ -153,7 +153,7 @@ Help me to modify this body that can have some glowing more fancy
 ```
 
 AI Output:
-```bash
+```css
 /* -------------------------------------------------
    FANCY GLOWING + ANIMATED BACKGROUND
    ------------------------------------------------- */
@@ -224,7 +224,7 @@ body::after {
 Verification: I verify it by implement the code in the style.css file. 
 
 ### Example 2:
-```bash
+```css
 .note-card {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
@@ -235,7 +235,7 @@ Verification: I verify it by implement the code in the style.css file.
 ```
 Change to:
 
-```bash
+```css
 .glass-card {
   background: rgba(30, 30, 50, 0.4);
   backdrop-filter: blur(16px);
