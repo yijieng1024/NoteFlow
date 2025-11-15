@@ -76,7 +76,7 @@ body::after {
   100% { transform: scale(1.4); opacity: 0.8; }
 }
 
-/* Optional: Tiny floating purple sparks */
+/* Tiny floating purple sparks */
 body {
   background-image: 
     radial-gradient(circle at 20% 80%, rgba(180, 100, 255, 0.2) 1px, transparent 1px),
@@ -91,13 +91,13 @@ body {
   100% { background-position: 80px 80px, -80px -80px, 40px -40px; }
 }
 
-/* ==== Container ==== */
+/* Container */
 .container {
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* ==== Typography ==== */
+/* Typography */
 h1 {
   color: #e0d0ff;
   font-weight: 700;
@@ -123,7 +123,7 @@ p {
   font-size: 15px;
 }
 
-/* ==== Glass Card (Dark Mode) ==== */
+/* Glass Card (Dark Mode) */
 .glass-card {
   background: rgba(30, 30, 50, 0.4);
   backdrop-filter: blur(16px);
@@ -159,7 +159,7 @@ p {
 .form-control {
   background: rgba(40, 40, 60, 0.5);
   border: 1.5px solid rgba(159, 79, 255, 0.3);
-  color: #e0d0ff;
+  color: white;
   border-radius: 12px;
   padding: 12px 16px;
   transition: all 0.2s ease;
