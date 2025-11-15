@@ -46,6 +46,7 @@ NoteFlow is a lightweight text-based notes management web application build with
 ---
 
 ## Project Structure
+```pgsql
 NoteFlow/
 │
 ├── backend/
@@ -66,6 +67,7 @@ NoteFlow/
 ├── index.html
 ├── package.json
 └── vite.config.js
+```
 
 ---
 
