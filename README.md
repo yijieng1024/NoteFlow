@@ -63,7 +63,6 @@ NoteFlow/
 │ └── components/
 │ ├── NoteForm.vue
 │ ├── NotesList.vue
-│ └── ConfirmationModal.vue
 ├── index.html
 ├── package.json
 └── vite.config.js
