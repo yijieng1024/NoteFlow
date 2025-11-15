@@ -1,10 +1,5 @@
-import {createApp} from 'vue';
+import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';
-import axios from 'axios';
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
-axios.defaults.baseURL = 'http://localhost:5000';
-
-const app = createApp(App);
-app.use(router);
-app.mount('#app');
+createApp(App).mount('#app');

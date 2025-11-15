@@ -1,61 +1,61 @@
 <template>
-  <div class="note-form">
-    <h2>{{ editNote ? "Edit Note" : "Add Note" }}</h2>
-    <form @submit.prevent="submitNote">
-      <input v-model="title" placeholder="Title" required />
-      <textarea v-model="content" placeholder="Content" required></textarea>
-      <button type="submit">{{ editNote ? "Update" : "Add" }}</button>
-      <button v-if="editNote" @click.prevent="cancelEdit">Cancel</button>
+  <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/30">
+    <h2 class="text-2xl font-bold text-white mb-4">
+      {{ editNote.id ? 'Edit Note' : 'Create Note' }}
+    </h2>
+    <form @submit.prevent="submit">
+      <input
+        v-model="title"
+        placeholder="Title"
+        required
+        class="w-full p-3 rounded-lg mb-3 bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-white"
+      />
+      <textarea
+        v-model="content"
+        placeholder="Content"
+        required
+        rows="4"
+        class="w-full p-3 rounded-lg mb-4 bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-white"
+      ></textarea>
+      <div class="flex gap-2">
+        <button
+          type="submit"
+          class="bg-green-500 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-600 transition"
+        >
+          {{ editNote.id ? 'Update' : 'Save' }}
+        </button>
+        <button
+          type="button"
+          @click="$emit('cancel')"
+          class="bg-gray-500 text-white px-5 py-2 rounded-lg font-medium hover:bg-gray-600 transition"
+        >
+          Cancel
+        </button>
+      </div>
     </form>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    editNote: Object,
-  },
-  data() {
-    return {
-      title: this.editNote?.title || "",
-      content: this.editNote?.content || "",
-    };
-  },
-  watch: {
-    editNote(newVal) {
-      this.title = newVal?.title || "";
-      this.content = newVal?.content || "";
-    },
-  },
-  methods: {
-    submitNote() {
-      this.$emit("submit-note", {
-        id: this.editNote?.id,
-        title: this.title,
-        content: this.content,
-      });
-      this.title = "";
-      this.content = "";
-    },
-    cancelEdit() {
-      this.$emit("cancel-edit");
-    },
-  },
+<script setup>
+import { ref, watch } from 'vue';
+const props = defineProps(['editNote']);
+const emit = defineEmits(['submit-note', 'cancel']);
+
+const title = ref('');
+const content = ref('');
+
+watch(() => props.editNote, (val) => {
+  title.value = val?.title || '';
+  content.value = val?.content || '';
+}, { immediate: true });
+
+const submit = () => {
+  emit('submit-note', {
+    id: props.editNote?.id,
+    title: title.value,
+    content: content.value,
+  });
+  title.value = '';
+  content.value = '';
 };
 </script>
-
-<style scoped>
-.note-form {
-  margin-bottom: 1rem;
-}
-input, textarea {
-  display: block;
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-}
-button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 1rem;
-}
-</style>

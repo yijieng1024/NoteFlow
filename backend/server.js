@@ -1,32 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
-require('dotenv').config();
+const noteRoutes = require('./routes/notes');
+const path = require('path');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
 
-// MySQL connection
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
-});
+// Mount routes
+app.use('/notes', noteRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-db.connect(err => {
-  if (err) {
-    console.error("Database Connection Failed:", err);
-  } else {
-    console.log("Connected to MySQL Database");
-  }
-});
-
-// Routes
 app.get('/', (req, res) => {
-  res.send('NoteFlow API is running...');
+  res.send('NoteFlow API Running');
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

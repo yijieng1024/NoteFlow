@@ -1,51 +1,51 @@
 const express = require("express");
 const router = express.Router();
+const db = require("../db");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// pass the db connection from server.js
-module.exports = (db) => {
-  // GET all notes
-  router.get("/", (req, res) => {
-    db.query("SELECT * FROM notes ORDER BY created_at DESC", (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.json(results);
-    });
+// GET all notes
+router.get("/", (req, res) => {
+  const sql = "SELECT * FROM notes";
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
   });
+});
 
-  // POST create note
-  router.post("/", (req, res) => {
-    const { title, content } = req.body;
-    db.query(
-      "INSERT INTO notes (title, content) VALUES (?, ?)",
-      [title, content],
-      (err, result) => {
-        if (err) return res.status(500).json(err);
-        res.json({ id: result.insertId, title, content });
-      }
-    );
+// POST - Create note
+router.post("/", (req, res) => {
+  const { title, content } = req.body;
+
+  const sql = "INSERT INTO notes (title, content) VALUES (?, ?)";
+  db.query(sql, [title, content], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ id: result.insertId, title, content });
   });
+});
 
-  // PUT update note
-  router.put("/:id", (req, res) => {
-    const { id } = req.params;
-    const { title, content } = req.body;
-    db.query(
-      "UPDATE notes SET title=?, content=?, updated_at=CURRENT_TIMESTAMP WHERE id=?",
-      [title, content, id],
-      (err) => {
-        if (err) return res.status(500).json(err);
-        res.json({ id, title, content });
-      }
-    );
+// PUT - Update note
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  const sql = "UPDATE notes SET title=?, content=? WHERE id=?";
+  db.query(sql, [title, content, id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ error: "not found" });
+    res.json({ id: Number(id), title, content });
   });
+});
 
-  // DELETE note
-  router.delete("/:id", (req, res) => {
-    const { id } = req.params;
-    db.query("DELETE FROM notes WHERE id=?", [id], (err) => {
-      if (err) return res.status(500).json(err);
-      res.json({ message: "Note deleted successfully" });
-    });
+// DELETE note
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  const sql = "DELETE FROM notes WHERE id=?";
+  db.query(sql, [id], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: "Note deleted" });
   });
+});
 
-  return router;
-};
+module.exports = router;
