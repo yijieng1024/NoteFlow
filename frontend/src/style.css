@@ -342,6 +342,18 @@ p {
   box-shadow: 0 0 0 3px rgba(159, 79, 255, 0.2);
 }
 
+/* ==== Form Validation ==== */
+.is-invalid,
+.border-danger {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
 /* ==== Grid & Spacing ==== */
 .row { display: flex; flex-wrap: wrap; margin: -12px; }
 .g-4 > * { padding: 12px; }

@@ -1,0 +1,13 @@
+backend:
+  build:
+    context: ./backend
+    dockerfile: Dockerfile
+  ports:
+    - "3000:3000"
+  depends_on:
+    - mysql
+  environment:
+    - DB_HOST=mysql
+    - DB_USER=appuser
+    - DB_PASS=apppass
+    - DB_NAME=noteflow

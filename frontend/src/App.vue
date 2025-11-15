@@ -11,13 +11,12 @@
     <div v-if="editNote !== null" class="glass-card mb-5">
       <h3 class="text-white mb-3">{{ editNote.id ? 'Edit Note' : 'Create Note' }}</h3>
 
-      <!-- Title -->
-      <input
-        v-model="form.title"
-        placeholder="Title"
-        class="form-control mb-3"
-        required
-      />
+      <!-- Title Input -->
+      <div class="mb-3">
+        <input v-model="form.title" placeholder="Title" class="form-control" :class="{ 'is-invalid': errors.title }"
+          required />
+        <div class="invalid-feedback">{{ errors.title }}</div>
+      </div>
 
       <!-- Toolbar -->
       <div class="editor-toolbar mb-2">
@@ -26,22 +25,28 @@
         <button type="button" class="editor-btn" @click="format('underline')" title="Underline"><u>U</u></button>
         <div class="toolbar-divider"></div>
 
-        <button type="button" class="editor-btn" @click="format('insertUnorderedList')" title="Bullet list"><img src="../icon/bullet-list.png" alt="Bullet list" style="width: 20px; height: 20px;"/></button>
-        <button type="button" class="editor-btn" @click="format('insertOrderedList')" title="Numbered list"><img src="../icon/numbered-list.png" alt="Numbered list" style="width: 20px; height: 20px;"/></button>
+        <button type="button" class="editor-btn" @click="format('insertUnorderedList')" title="Bullet list"><img
+            src="../icon/bullet-list.png" alt="Bullet list" style="width: 20px; height: 20px;" /></button>
+        <button type="button" class="editor-btn" @click="format('insertOrderedList')" title="Numbered list"><img
+            src="../icon/numbered-list.png" alt="Numbered list" style="width: 20px; height: 20px;" /></button>
         <div class="toolbar-divider"></div>
-        <button type="button" class="editor-btn" @click="format('justifyLeft')" title="Left align"><img src="../icon/left-align.png" alt="Left align" style="width: 20px; height: 20px;"/></button>
-        <button type="button" class="editor-btn" @click="format('justifyCenter')" title="Center align"><img src="../icon/center-align.png" alt="Center align" style="width: 20px; height: 20px;"/></button>
-        <button type="button" class="editor-btn" @click="format('justifyRight')" title="Right align"><img src="../icon/right-align.png" alt="Right align" style="width: 20px; height: 20px;"/></button>
+        <button type="button" class="editor-btn" @click="format('justifyLeft')" title="Left align"><img
+            src="../icon/left-align.png" alt="Left align" style="width: 20px; height: 20px;" /></button>
+        <button type="button" class="editor-btn" @click="format('justifyCenter')" title="Center align"><img
+            src="../icon/center-align.png" alt="Center align" style="width: 20px; height: 20px;" /></button>
+        <button type="button" class="editor-btn" @click="format('justifyRight')" title="Right align"><img
+            src="../icon/right-align.png" alt="Right align" style="width: 20px; height: 20px;" /></button>
       </div>
 
-      <!-- Editable content -->
-      <div
-        ref="contentEditor"
-        class="editor-content"
-        contenteditable="true"
-        @input="onEditorInput"
-        :data-placeholder="editNote && !editNote.id ? 'Start typing...' : ''"
-      ></div>
+      <!-- Editor -->
+      <div class="mb-3">
+        <div ref="contentEditor" class="editor-content" contenteditable="true" @input="onEditorInput"
+          :class="{ 'border-danger': errors.content }"
+          :data-placeholder="editNote && !editNote.id ? 'Start typing...' : ''"></div>
+        <div class="text-danger small mt-1" v-if="errors.content">
+          {{ errors.content }}
+        </div>
+      </div>
 
       <!-- Save / Cancel -->
       <div class="mt-3">
@@ -55,11 +60,7 @@
     </div>
 
     <!-- Notes List -->
-    <NotesList
-      :notes="notes"
-      @edit-note="startEdit"
-      @delete-note="deleteNote"
-    />
+    <NotesList :notes="notes" @edit-note="startEdit" @delete-note="deleteNote" />
   </div>
 </template>
 
@@ -74,7 +75,7 @@ const editNote = ref(null);
 const selectedNote = ref(null);
 const form = ref({ title: '', content: '' });
 const contentEditor = ref(null);
-const imageInput = ref(null);
+const errors = ref({ title: '', content: '' });
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 // ---------- Lifecycle ----------
@@ -104,6 +105,7 @@ function onEditorInput() {
 watch(editNote, async (note) => {
   if (!note) return;
   form.value.title = note.title ?? '';
+  errors.value = { title: '', content: '' };
   await nextTick();
   if (contentEditor.value) {
     contentEditor.value.innerHTML = note.content ?? '';
@@ -114,6 +116,7 @@ watch(editNote, async (note) => {
 function createNewNote() {
   editNote.value = {};
   form.value = { title: '', content: '' };
+  errors.value = { title: '', content: '' };
   nextTick(() => contentEditor.value?.focus());
 }
 
@@ -122,7 +125,29 @@ function startEdit(note) {
   selectedNote.value = note;
 }
 
+function validateForm() {
+  let valid = true;
+  errors.value = { title: '', content: '' };
+
+  const trimmedTitle = form.value.title.trim();
+  const trimmedContent = form.value.content.trim();
+
+  if (!trimmedTitle) {
+    errors.value.title = 'Title is required';
+    valid = false;
+  }
+
+  if (!trimmedContent) {
+    errors.value.content = 'Content is required';
+    valid = false;
+  }
+
+  return valid;
+}
+
 async function submitNote() {
+  if (!validateForm()) return;
+
   const payload = {
     title: form.value.title.trim(),
     content: form.value.content,
