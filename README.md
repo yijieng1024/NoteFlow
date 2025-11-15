@@ -69,7 +69,7 @@ NoteFlow/
 ```
 
 ## Notes
-Due to unexpected issue, the deployment on Vercel unable to save the notes to the Database. Sorry for inconvinience.
+Due to unexpected issue, the deployment on Vercel unable to save the notes to the Database. Sorry for inconvenience.
 
 ---
 
